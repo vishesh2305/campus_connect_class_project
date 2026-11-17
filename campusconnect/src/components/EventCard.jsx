@@ -1,0 +1,22 @@
+
+import { Link } from 'react-router-dom';
+
+export default function EventCard({ event, isRegistered, onToggle }) {
+  const seatsLeft = event.seats - event.registered - (isRegistered ? 1 : 0);
+
+  return (
+	<article className='card'>
+  	<span className='badge'>{event.category}</span>
+  	<h3><Link to={`/events/${event.id}`}>{event.title}</Link></h3>
+	{/* <h3><a href={`/events/${event.id}`}>{event.title}</a></h3> */}
+  	<p className='muted'>{event.club} · {event.date}</p>
+  	<p>{seatsLeft > 0 ? `${seatsLeft} seats left` : 'Sold out'}</p>
+  	<button
+    	onClick={() => onToggle(event.id)}
+    	disabled={seatsLeft === 0 && !isRegistered}
+  	>
+    	{isRegistered ? 'Cancel RSVP' : 'RSVP'}
+  	</button>
+	</article>
+  );
+} 

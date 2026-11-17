@@ -1,0 +1,68 @@
+{
+  "events": [
+    {
+      "id": "1",
+      "title": "Hackathon 2026",
+      "club": "Coding Club",
+      "category": "Tech",
+      "date": "2026-12-05",
+      "seats": 100,
+      "registered": 72
+    },
+    {
+      "id": "3",
+      "title": "Inter-college Cricket",
+      "club": "Sports Club",
+      "category": "Sports",
+      "date": "2026-12-18",
+      "seats": 60,
+      "registered": 60
+    },
+    {
+      "id": "4",
+      "title": "AI Workshop",
+      "club": "AI Club",
+      "category": "Tech",
+      "date": "2026-12-20",
+      "seats": 80,
+      "registered": 35
+    },
+    {
+      "id": "5",
+      "title": "Dance Competition",
+      "club": "Dance Club",
+      "category": "Cultural",
+      "date": "2026-12-22",
+      "seats": 150,
+      "registered": 90
+    },
+    {
+      "id": "6",
+      "title": "Web Dev Bootcamp",
+      "club": "Coding Club",
+      "category": "Tech",
+      "date": "2026-12-28",
+      "seats": 50,
+      "registered": 12
+    },
+    {
+      "title": "Harman Marriage",
+      "club": "Sattebaj",
+      "category": "Cultural",
+      "date": "2027-01-01",
+      "seats": 2,
+      "registered": 0,
+      "id": "RVJmsJyBOu8"
+    },
+    {
+      "title": "testing",
+      "club": "testing",
+      "category": "Tech",
+      "date": "2026-11-14",
+      "seats": 200,
+      "registered": 0,
+      "id": "SYnAByXMU74"
+    }
+  ],
+  "$schema": "./node_modules/json-server/schema.json"
+}
