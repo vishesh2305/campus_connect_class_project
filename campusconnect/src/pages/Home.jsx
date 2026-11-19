@@ -1,36 +1,61 @@
 import { useState, useEffect } from 'react';
-import { getEvents } from '../api';
+import { getEvents, getMyRsvps, rsvpEvent, cancelRsvp } from '../api';
+import { useAuth } from '../AuthContext';
 import EventCard from '../components/EventCard';
 import StatCard from '../components/StatCard';
 
 const categories = ['All', 'Tech', 'Cultural', 'Sports'];
 
 export default function Home() {
+  const { user } = useAuth();
   const [events, setEvents] = useState([]);
+  const [myIds, setMyIds] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [search, setSearch] = useState('');
   const [category, setCategory] = useState('All');
-  const [registeredIds, setRegisteredIds] = useState([]);
+
+  async function loadData() {
+    try {
+      const eventList = await getEvents();
+      setEvents(eventList);
+      if (user) {
+        const mine = await getMyRsvps();
+        setMyIds(mine.map((e) => e.id));
+      } else {
+        setMyIds([]);
+      }
+      setError('');
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  }
 
   useEffect(() => {
-    getEvents()
-      .then((data) => setEvents(data))
-      .catch((err) => setError(err.message))
-      .finally(() => setLoading(false));
-  }, []);
+    loadData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user]);
+
+  async function toggleRegister(id) {
+    try {
+      if (myIds.includes(id)) {
+        await cancelRsvp(id);
+      } else {
+        await rsvpEvent(id);
+      }
+      await loadData();
+    } catch (err) {
+      alert(err.message);
+    }
+  }
 
   const filtered = events.filter(
     (e) =>
       e.title.toLowerCase().includes(search.toLowerCase()) &&
       (category === 'All' || e.category === category)
   );
-
-  function toggleRegister(id) {
-    setRegisteredIds((prev) =>
-      prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]
-    );
-  }
 
   if (loading) {
     return <main className='container'><p>Loading events...</p></main>;
@@ -51,7 +76,7 @@ export default function Home() {
       <section className='stats'>
         <StatCard label='Total events' value={events.length} />
         <StatCard label='Showing' value={filtered.length} />
-        <StatCard label='My RSVPs' value={registeredIds.length} />
+        <StatCard label='My RSVPs' value={myIds.length} />
       </section>
 
       <section className='controls'>
@@ -83,8 +108,8 @@ export default function Home() {
             <EventCard
               key={e.id}
               event={e}
-              isRegistered={registeredIds.includes(e.id)}
-              onToggle={toggleRegister}
+              isRegistered={myIds.includes(e.id)}
+              onToggle={user ? toggleRegister : null}
             />
           ))}
         </section>
@@ -92,4 +117,3 @@ export default function Home() {
     </main>
   );
 }
-

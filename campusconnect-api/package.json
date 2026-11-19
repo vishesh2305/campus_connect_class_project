@@ -3,11 +3,17 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "dev": "node --watch server.js",
-    "start": "node server.js"
+    "dev": "node --watch --env-file=.env server.js",
+    "start": "node server.js",
+    "db:setup": "node --env-file=.env db/run.js db/schema.sql",
+    "db:seed": "node --env-file=.env db/run.js db/seed.sql",
+    "sql": "node --env-file=.env db/run.js"
   },
   "dependencies": {
+    "bcryptjs": "^3.0.3",
     "cors": "^2.8.5",
-    "express": "^5.0.0"
+    "express": "^5.0.0",
+    "jsonwebtoken": "^9.0.3",
+    "pg": "^8.23.1"
   }
 }
