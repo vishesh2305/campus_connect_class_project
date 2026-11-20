@@ -2,18 +2,27 @@
   "name": "campus-connect-api",
   "version": "1.0.0",
   "type": "module",
-  "scripts": {
-    "dev": "node --watch --env-file=.env server.js",
-    "start": "node server.js",
-    "db:setup": "node --env-file=.env db/run.js db/schema.sql",
-    "db:seed": "node --env-file=.env db/run.js db/seed.sql",
-    "sql": "node --env-file=.env db/run.js"
-  },
+"scripts": {
+  "dev": "node --watch --env-file=.env server.js",
+  "start": "node server.js",
+  "test": "vitest run",
+  "test:watch": "vitest",
+  "db:setup": "node --env-file=.env db/run.js db/schema.sql",
+  "db:seed": "node --env-file=.env db/run.js db/seed.sql",
+  "sql": "node --env-file=.env db/run.js"
+},
   "dependencies": {
     "bcryptjs": "^3.0.3",
     "cors": "^2.8.5",
     "express": "^5.0.0",
+    "express-rate-limit": "^8.7.5",
+    "helmet": "^8.3.0",
     "jsonwebtoken": "^9.0.3",
+    "morgan": "^1.12.1",
     "pg": "^8.23.1"
+  },
+  "devDependencies": {
+    "supertest": "^7.3.2",
+    "vitest": "^5.1.1"
   }
 }

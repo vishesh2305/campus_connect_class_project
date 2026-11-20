@@ -1,0 +1,41 @@
+services:
+  db:
+    image: postgres:17
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: campus_connect
+    volumes:
+      - db_data:/var/lib/postgresql/data
+      - ./campusconnect-api/db/schema.sql:/docker-entrypoint-initdb.d/01-schema.sql:ro
+      - ./campusconnect-api/db/seed.sql:/docker-entrypoint-initdb.d/02-seed.sql:ro
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U postgres -d campus_connect']
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  api:
+    build: ./campusconnect-api
+    environment:
+      DATABASE_URL: postgresql://postgres:postgres@db:5432/campus_connect
+      JWT_SECRET: ${JWT_SECRET:-dev-only-secret-change-me}
+      PORT: 3001
+    ports:
+      - '3002:3001'
+    depends_on:
+      db:
+        condition: service_healthy
+
+  web:
+    build:
+      context: ./campusconnect
+      args:
+        VITE_API_URL: http://localhost:3002
+    ports:
+      - '8080:80'
+    depends_on:
+      - api
+
+volumes:
+  db_data:
